@@ -63,4 +63,10 @@ public class DelimiterExtractorTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("구분자가 비어있습니다");
     }
+
+    @Test
+    void null_입력시_예외() {
+        assertThatThrownBy(() -> extractor.extract(null))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 }
