@@ -1,11 +1,17 @@
 package calculator.domain;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class StringParser {
-    private static final String CUSTOM_DELIMITER_PREFIX = "//";
     private static final String CUSTOM_DELIMITER_SUFFIX = "\n";
-    private static final String DEFAULT_DELIMITERS = ",|:" ;
+    private final DelimiterExtractor delimiterExtractor;
+    private final NumberParser numberParser;
+
+    public StringParser() {
+        this.delimiterExtractor = new DelimiterExtractor();
+        this.numberParser = new NumberParser();
+    }
 
     public List<Integer> parse(String input) {
         if (input == null) {
@@ -16,40 +22,37 @@ public class StringParser {
         }
 
         input = input.replace("\\n", "\n");
-        String delimiter = DEFAULT_DELIMITERS;
-        String numbers = input;
 
-        if(input.startsWith(CUSTOM_DELIMITER_PREFIX)){
+        String delimiter = delimiterExtractor.extract(input);
+        String numbers = extractNumbers(input);
+        String escapedDelimiter = escapeRegexSpecialCharacters(delimiter);
+
+        return numberParser.parse(numbers, escapedDelimiter);
+    }
+
+    private String extractNumbers(String input) {
+        if (input.contains(CUSTOM_DELIMITER_SUFFIX)) {
             int delimiterEndIndex = input.indexOf(CUSTOM_DELIMITER_SUFFIX);
-            String customDelimiter = input.substring(CUSTOM_DELIMITER_PREFIX.length(), delimiterEndIndex);
-            delimiter = escapeRegexSpecialCharacters(customDelimiter);
-            numbers = input.substring(delimiterEndIndex+1);
+            return input.substring(delimiterEndIndex + 1);
         }
-        return parseNumbers(numbers, delimiter);
+        return input;
     }
 
-    private String escapeRegexSpecialCharacters(String delimiter){
-        return delimiter.replaceAll("([\\\\+*?\\[\\](){}|^$.\\-])", "\\\\$1");
-    }
+    private String escapeRegexSpecialCharacters(String delimiter) {
+        // 기본 구분자는 이미 정규식 형태이므로 그대로 반환
+        if (delimiter.equals(",|:")) {
+            return delimiter;
+        }
 
-    private List<Integer> parseNumbers(String numbers, String delimiter) {
-        String[] tokens = numbers.split(delimiter);
-        List<Integer> result = new ArrayList<>();
-
-        for (String token : tokens) {
-            if (!token.isEmpty()) {
-                result.add(parseInteger(token));
+        // 각 문자를 escape하고 |로 연결
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < delimiter.length(); i++) {
+            if (i > 0) {
+                result.append("|");
             }
+            String ch = String.valueOf(delimiter.charAt(i));
+            result.append(ch.replaceAll("([\\\\+*?\\[\\](){}|^$.\\-])", "\\\\$1"));
         }
-        return result;
+        return result.toString();
     }
-
-    private int parseInteger(String token) {
-        try {
-            return Integer.parseInt(token.trim());
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("숫자가 아닌 값이 포함되어 있습니다: " + token);
-        }
-    }
-
 }
