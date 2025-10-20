@@ -86,9 +86,9 @@ calculator/
 - [x] 빈 토큰(연속된 구분자) 처리
 
 ### 3️⃣ 계산 (`Calculator`)
-- [ ] 숫자 리스트를 받아 합계 계산
-- [ ] 음수가 포함되어 있는지 검증
-- [ ] 음수 입력 시 `IllegalArgumentException` 발생
+- [x] 숫자 리스트를 받아 합계 계산
+- [x] 음수가 포함되어 있는지 검증
+- [x] 음수 입력 시 `IllegalArgumentException` 발생
 
 ### 4️⃣ 출력 처리 (`OutputView`)
 - [x] 계산 결과를 `"결과 : {숫자}"` 형식으로 출력
