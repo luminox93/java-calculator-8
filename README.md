@@ -242,11 +242,12 @@ Exception in thread "main" java.lang.IllegalArgumentException: 음수는 입력�
 - 로직이 분산되어 있고 책임이 불명확함
 
 **개선 방안:**
-- [ ] `DelimiterProcessor` 클래스 도입
-  - 구분자 추출
-  - 숫자 부분 추출
-  - 정규식 이스케이프 처리
-- [ ] 구분자 관련 모든 로직을 한 곳에서 처리
+- [x] `DelimiterHandler` 클래스 도입
+  - 구분자 추출 및 정규식 패턴 변환 (`extractDelimiterPattern`)
+  - 숫자 부분 추출 (`extractNumbers`)
+  - 정규식 이스케이프 처리 (`escapeRegexCharacter`)
+- [x] 구분자 관련 모든 로직을 한 곳에서 처리
+- [x] `StringParser`에서 분산된 로직 제거 및 `DelimiterHandler` 위임
 
 ---
 
@@ -261,11 +262,13 @@ Exception in thread "main" java.lang.IllegalArgumentException: 음수는 입력�
   - 숫자 파싱 위임
 
 **개선 방안:**
-- [ ] `StringParser`는 orchestration만 담당하도록 단순화
-- [ ] 각 세부 작업은 전문 클래스에 위임
-  - `DelimiterProcessor`: 구분자 관련 모든 처리
+- [x] `StringParser`는 orchestration만 담당하도록 단순화
+- [x] 각 세부 작업은 전문 클래스에 위임
+  - `DelimiterHandler`: 구분자 관련 모든 처리
   - `NumberParser`: 순수 숫자 파싱만
-  - `InputProcessor`: 입력 전처리 (이스케이프 등)
+- [x] Early return 패턴 적용
+- [x] Stream API로 반복문 제거
+- [x] 삼항 연산자로 조건문 간소화
 
 ---
 
@@ -275,8 +278,8 @@ Exception in thread "main" java.lang.IllegalArgumentException: 음수는 입력�
 - 정규식 처리 로직이 `StringParser`에 위치하여 응집도가 낮음
 
 **개선 방안:**
-- [ ] 정규식 처리를 `DelimiterProcessor` 또는 별도 유틸리티로 이동
-- [ ] 기본 구분자 특수 처리 로직 개선
+- [x] 정규식 처리를 `DelimiterHandler`로 이동
+- [x] 메서드명을 명확하게 변경 (`toRegexPattern`, `escapeRegexCharacter`)
 
 ---
 
