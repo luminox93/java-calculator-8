@@ -36,9 +36,16 @@
 ```
 calculator/
 ├── Application.java           (메인 실행)
+├── controller/                (흐름 제어)
+│   └── CalculatorController.java  (전체 실행 흐름 제어)
 ├── domain/                    (비즈니스 로직)
 │   ├── Calculator.java        (덧셈 계산 담당)
-│   └── StringParser.java      (문자열 파싱 및 구분자 처리)
+│   ├── StringParser.java      (문자열 파싱 오케스트레이션)
+│   ├── DelimiterHandler.java (구분자 추출 및 처리)
+│   ├── DelimiterExtractor.java (구분자 추출)
+│   ├── NumberParser.java      (숫자 파싱)
+│   ├── NumberValidator.java   (숫자 검증)
+│   └── ErrorMessages.java     (에러 메시지 상수)
 └── view/                      (입출력)
     ├── InputView.java         (사용자 입력 처리)
     └── OutputView.java        (결과 출력 처리)
@@ -48,23 +55,48 @@ calculator/
 
 **`Application`**
 - 프로그램의 시작점
-- 전체 실행 흐름 제어
+- Controller를 생성하고 실행
+
+**`controller/CalculatorController`**
+- 전체 실행 흐름 제어 (의존성 관리)
+- View와 Domain 계층 연결
+- 입력 → 파싱 → 계산 → 출력 흐름 관리
 
 **`domain/Calculator`**
 - 숫자 리스트를 받아 덧셈 수행
-- 음수 검증 로직
+- NumberValidator를 통한 검증 위임
 - 순수 계산 로직만 담당
 
 **`domain/StringParser`**
-- 커스텀 구분자 추출
-- 구분자 기준으로 문자열 분리
-- 문자열을 숫자 리스트로 변환
-- 숫자 변환 시 예외 처리
+- 문자열 파싱 오케스트레이션
+- DelimiterHandler와 NumberParser에게 위임
+- Early return 패턴으로 예외 처리
+
+**`domain/DelimiterHandler`**
+- 구분자 추출 및 정규식 패턴 변환
+- 숫자 부분 추출
+- 구분자 관련 모든 로직 통합
+
+**`domain/DelimiterExtractor`**
+- 커스텀 구분자 형식 검증
+- 기본 구분자 또는 커스텀 구분자 추출
+
+**`domain/NumberParser`**
+- 구분자로 분리된 문자열을 숫자 리스트로 변환
+- Stream API를 활용한 함수형 파싱
+- 음수 및 유효하지 않은 숫자 검증
+
+**`domain/NumberValidator`**
+- 비즈니스 로직 계층의 숫자 검증
+- null 체크 및 음수 검증
+
+**`domain/ErrorMessages`**
+- 모든 에러 메시지 상수 중앙 관리
+- 중복 제거 및 일관성 유지
 
 **`view/InputView`**
 - 사용자에게 입력 안내 메시지 출력
 - `Console.readLine()`을 통한 입력 받기
-- 입력값 반환
 
 **`view/OutputView`**
 - 계산 결과를 형식에 맞춰 출력
