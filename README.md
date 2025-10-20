@@ -219,6 +219,69 @@ Exception in thread "main" java.lang.IllegalArgumentException: 음수는 입력�
 
 ---
 
+`## 🔧 추가 개선사항
+
+### 1. 에러 메시지 상수 중앙화
+**현재 문제:**
+- `ERROR_NULL_INPUT`이 여러 클래스에 중복 정의됨
+  - `StringParser`, `DelimiterExtractor`, `NumberParser`
+- `ERROR_NEGATIVE_NUMBER`가 `NumberParser`와 `NumberValidator`에 중복
+
+**개선 방안:**
+- [x] `ErrorMessages` 클래스를 생성하여 모든 에러 메시지 상수 중앙 관리
+- [x] 중복 제거 및 일관성 있는 에러 메시지 유지
+
+---
+
+### 2. 구분자 관련 로직 통합
+**현재 문제:**
+- `StringParser.extractNumbers()`: 숫자 부분 추출
+- `DelimiterExtractor.extract()`: 구분자 추출
+- `StringParser.escapeRegexSpecialCharacters()`: 정규식 이스케이프
+- 위 세 메서드가 모두 동일한 커스텀 구분자 형식(`//...\n`)을 파싱
+- 로직이 분산되어 있고 책임이 불명확함
+
+**개선 방안:**
+- [ ] `DelimiterProcessor` 클래스 도입
+  - 구분자 추출
+  - 숫자 부분 추출
+  - 정규식 이스케이프 처리
+- [ ] 구분자 관련 모든 로직을 한 곳에서 처리
+
+---
+
+### 3. StringParser 책임 과다 문제
+**현재 문제:**
+- `StringParser`가 너무 많은 책임을 가짐:
+  - 입력 검증
+  - `\n` 이스케이프 처리
+  - 구분자 추출 위임
+  - 숫자 부분 추출
+  - 정규식 처리
+  - 숫자 파싱 위임
+
+**개선 방안:**
+- [ ] `StringParser`는 orchestration만 담당하도록 단순화
+- [ ] 각 세부 작업은 전문 클래스에 위임
+  - `DelimiterProcessor`: 구분자 관련 모든 처리
+  - `NumberParser`: 순수 숫자 파싱만
+  - `InputProcessor`: 입력 전처리 (이스케이프 등)
+
+---
+
+### 4. 정규식 이스케이프 로직 개선
+**현재 문제:**
+- `escapeRegexSpecialCharacters()` 메서드가 기본 구분자(`",|:"`)를 하드코딩으로 체크
+- 정규식 처리 로직이 `StringParser`에 위치하여 응집도가 낮음
+
+**개선 방안:**
+- [ ] 정규식 처리를 `DelimiterProcessor` 또는 별도 유틸리티로 이동
+- [ ] 기본 구분자 특수 처리 로직 개선
+
+---
+
+<br>
+
 <div align="center">
 
 ![footer](https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=12&height=150&section=footer)

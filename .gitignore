@@ -36,3 +36,4 @@ out/
 
 ### Local modifications ###
 build.gradle
+gradle.properties

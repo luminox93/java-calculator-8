@@ -5,16 +5,9 @@ public class DelimiterExtractor {
     private static final String CUSTOM_DELIMITER_SUFFIX = "\n";
     private static final String DEFAULT_DELIMITERS = ",|:";
 
-    private static final String ERROR_NULL_INPUT = "입력값이 null입니다";
-    private static final String ERROR_EMPTY_DELIMITER = "구분자가 비어있습니다";
-    private static final String ERROR_INVALID_PREFIX = "커스텀 구분자는 '//'로 시작해야 합니다";
-    private static final String ERROR_MISSING_NEWLINE = "커스텀 구분자 형식에 '\\n'이 없습니다";
-    private static final String ERROR_MULTIPLE_NEWLINES = "커스텀 구분자 형식에 '\\n'이 여러 개입니다";
-    private static final String ERROR_DELIMITER_CONTAINS_DIGIT = "구분자에 숫자를 사용할 수 없습니다";
-
     public String extract(String input) {
         if (input == null) {
-            throw new IllegalArgumentException(ERROR_NULL_INPUT);
+            throw new IllegalArgumentException(ErrorMessages.NULL_INPUT);
         }
 
         boolean startsWithPrefix = input.startsWith(CUSTOM_DELIMITER_PREFIX);
@@ -28,11 +21,11 @@ public class DelimiterExtractor {
             String customDelimiter = input.substring(CUSTOM_DELIMITER_PREFIX.length(), delimiterEndIndex);
 
             if (customDelimiter.isEmpty()) {
-                throw new IllegalArgumentException(ERROR_EMPTY_DELIMITER);
+                throw new IllegalArgumentException(ErrorMessages.EMPTY_DELIMITER);
             }
 
             if (containsDigit(customDelimiter)) {
-                throw new IllegalArgumentException(ERROR_DELIMITER_CONTAINS_DIGIT);
+                throw new IllegalArgumentException(ErrorMessages.DELIMITER_CONTAINS_DIGIT);
             }
 
             return customDelimiter;
@@ -44,17 +37,17 @@ public class DelimiterExtractor {
 
     private void validateCustomDelimiterFormat(String input) {
         if (!input.startsWith(CUSTOM_DELIMITER_PREFIX)) {
-            throw new IllegalArgumentException(ERROR_INVALID_PREFIX);
+            throw new IllegalArgumentException(ErrorMessages.INVALID_PREFIX);
         }
 
         if (!input.contains(CUSTOM_DELIMITER_SUFFIX)) {
-            throw new IllegalArgumentException(ERROR_MISSING_NEWLINE);
+            throw new IllegalArgumentException(ErrorMessages.MISSING_NEWLINE);
         }
 
         int firstNewline = input.indexOf(CUSTOM_DELIMITER_SUFFIX);
         int secondNewline = input.indexOf(CUSTOM_DELIMITER_SUFFIX, firstNewline + 1);
         if (secondNewline != -1) {
-            throw new IllegalArgumentException(ERROR_MULTIPLE_NEWLINES);
+            throw new IllegalArgumentException(ErrorMessages.MULTIPLE_NEWLINES);
         }
     }
 
