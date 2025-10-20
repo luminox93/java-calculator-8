@@ -25,48 +25,106 @@
 
 ---
 
-## 📝 구현할 기능 목록
+## 🏗️ 프로젝트 구조 설계
 
-### 1️⃣ 입력 처리
-- [ ] 사용자로부터 문자열 입력 받기 (`Console.readLine()` 사용)
-- [ ] 빈 문자열 또는 null 입력 시 0 반환
+### 📦 패키지 구조
+```
+calculator/
+├── Application.java           (메인 실행)
+├── domain/                    (비즈니스 로직)
+│   ├── Calculator.java        (덧셈 계산 담당)
+│   └── StringParser.java      (문자열 파싱 및 구분자 처리)
+└── view/                      (입출력)
+    ├── InputView.java         (사용자 입력 처리)
+    └── OutputView.java        (결과 출력 처리)
+```
 
-### 2️⃣ 기본 구분자 처리
-- [ ] 쉼표(`,`)를 구분자로 숫자 분리
-- [ ] 콜론(`:`)을 구분자로 숫자 분리
-- [ ] 쉼표와 콜론이 혼합된 경우 처리
-    - 예: `"1,2:3"` ➜ `6`
+### 🎯 클래스 역할 및 책임
 
-### 3️⃣ 커스텀 구분자 처리
-- [ ] `"//"와 "\n"` 사이의 문자를 커스텀 구분자로 인식
-- [ ] 커스텀 구분자로 숫자 분리
-    - 예: `"//;\n1;2;3"` ➜ `6`
-- [ ] 커스텀 구분자 추출 후 나머지 문자열 파싱
+**`Application`**
+- 프로그램의 시작점
+- 전체 실행 흐름 제어
 
-### 4️⃣ 숫자 추출 및 계산
-- [ ] 구분자로 분리된 문자열을 숫자로 변환
-- [ ] 추출된 모든 양수의 합 계산
-- [ ] 결과를 `"결과 : {숫자}"` 형식으로 출력
+**`domain/Calculator`**
+- 숫자 리스트를 받아 덧셈 수행
+- 음수 검증 로직
+- 순수 계산 로직만 담당
 
-### 5️⃣ 예외 처리
-- [ ] 음수 입력 시 `IllegalArgumentException` 발생
-- [ ] 숫자가 아닌 값 입력 시 `IllegalArgumentException` 발생
-- [ ] 잘못된 형식의 커스텀 구분자 입력 시 `IllegalArgumentException` 발생
-- [ ] 빈 토큰(연속된 구분자) 처리
+**`domain/StringParser`**
+- 커스텀 구분자 추출
+- 구분자 기준으로 문자열 분리
+- 문자열을 숫자 리스트로 변환
+- 숫자 변환 시 예외 처리
+
+**`view/InputView`**
+- 사용자에게 입력 안내 메시지 출력
+- `Console.readLine()`을 통한 입력 받기
+- 입력값 반환
+
+**`view/OutputView`**
+- 계산 결과를 형식에 맞춰 출력
+- "결과 : {숫자}" 형식 처리
 
 <br>
 
 ---
 
-## 🚀 보다 구체화된 구현 목록
+## 📝 구현할 기능 목록
+
+### 1️⃣ 입력 처리 (`InputView`)
+- [ ] "덧셈할 문자열을 입력해 주세요." 출력
+- [ ] 사용자로부터 문자열 입력 받기 (`Console.readLine()` 사용)
+
+### 2️⃣ 문자열 파싱 (`StringParser`)
+- [ ] 빈 문자열 또는 null 입력 시 빈 리스트 반환
+- [ ] 커스텀 구분자 형식 확인 (`//`로 시작하는지)
+- [ ] `"//"와 "\n"` 사이의 문자를 커스텀 구분자로 추출
+- [ ] 커스텀 구분자가 있으면 해당 구분자 사용, 없으면 기본 구분자(`,`, `:`) 사용
+- [ ] 구분자를 기준으로 문자열 분리
+- [ ] 분리된 각 문자열을 정수로 변환
+- [ ] 숫자가 아닌 값 입력 시 `IllegalArgumentException` 발생
+- [ ] 빈 토큰(연속된 구분자) 처리
+
+### 3️⃣ 계산 (`Calculator`)
+- [ ] 숫자 리스트를 받아 합계 계산
+- [ ] 음수가 포함되어 있는지 검증
+- [ ] 음수 입력 시 `IllegalArgumentException` 발생
+
+### 4️⃣ 출력 처리 (`OutputView`)
+- [ ] 계산 결과를 `"결과 : {숫자}"` 형식으로 출력
+
+### 5️⃣ 전체 흐름 (`Application`)
+- [ ] InputView로 입력 받기
+- [ ] StringParser로 문자열 파싱
+- [ ] Calculator로 계산
+- [ ] OutputView로 결과 출력
+- [ ] 예외 발생 시 애플리케이션 종료
+
+<br>
+
+---
+
+## 🚀 보다 구체화된 구현 목록 (선택)
 
 <details>
-<summary><b>1️⃣ 객체지향 설계</b></summary>
+<summary><b>1️⃣ 세분화된 클래스 설계</b></summary>
 
-- [ ] 입력 처리 책임을 가진 `InputHandler` 클래스 분리
-- [ ] 구분자 파싱 책임을 가진 `DelimiterParser` 클래스 분리
-- [ ] 계산 로직을 담당하는 `StringCalculator` 클래스 분리
-- [ ] 출력 처리를 담당하는 `OutputHandler` 클래스 분리
+**추가 클래스 분리**
+```
+calculator/
+├── domain/
+│   ├── Calculator.java
+│   ├── DelimiterExtractor.java    (구분자 추출만 담당)
+│   ├── NumberParser.java           (숫자 변환만 담당)
+│   └── NumberValidator.java        (숫자 검증만 담당)
+└── view/
+    ├── InputView.java
+    └── OutputView.java
+```
+
+- [ ] 구분자 추출 책임 분리
+- [ ] 숫자 변환 책임 분리
+- [ ] 검증 로직 분리
 
 </details>
 
