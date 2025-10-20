@@ -69,4 +69,12 @@ public class DelimiterExtractorTest {
         assertThatThrownBy(() -> extractor.extract(null))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    void 다중_구분자_추출() {
+        // 여러 문자를 각각 구분자로 사용
+        assertThat(extractor.extract("//;,|\n1;2|3,4")).isEqualTo(";,|");
+        assertThat(extractor.extract("//;:\n1;2:3")).isEqualTo(";:");
+        assertThat(extractor.extract("//abc\n1a2b3c4")).isEqualTo("abc");
+    }
 }
