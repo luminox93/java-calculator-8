@@ -5,6 +5,8 @@ import java.util.List;
 
 public class StringParser {
     private static final String CUSTOM_DELIMITER_SUFFIX = "\n";
+    private static final String ERROR_NULL_INPUT = "입력값이 null입니다";
+
     private final DelimiterExtractor delimiterExtractor;
     private final NumberParser numberParser;
 
@@ -15,7 +17,7 @@ public class StringParser {
 
     public List<Integer> parse(String input) {
         if (input == null) {
-            throw new IllegalArgumentException("입력값이 null입니다");
+            throw new IllegalArgumentException(ERROR_NULL_INPUT);
         }
         if (input.isEmpty()) {
             return new ArrayList<>();
