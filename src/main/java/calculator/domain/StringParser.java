@@ -7,11 +7,12 @@ public class StringParser {
     private static final String CUSTOM_DELIMITER_SUFFIX = "\n";
     private static final String DEFAULT_DELIMITERS = ",|:" ;
 
-    public List<Integer> parse(String input){
-        if (input == null || input.isEmpty()){
+    public List<Integer> parse(String input) {
+        if (input == null || input.isEmpty()) {
             return new ArrayList<>();
         }
 
+        input = input.replace("\\n", "\n");
         String delimiter = DEFAULT_DELIMITERS;
         String numbers = input;
 

@@ -94,11 +94,11 @@ calculator/
 - [x] 계산 결과를 `"결과 : {숫자}"` 형식으로 출력
 
 ### 5️⃣ 전체 흐름 (`Application`)
-- [ ] InputView로 입력 받기
-- [ ] StringParser로 문자열 파싱
-- [ ] Calculator로 계산
-- [ ] OutputView로 결과 출력
-- [ ] 예외 발생 시 애플리케이션 종료
+- [x] InputView로 입력 받기
+- [x] StringParser로 문자열 파싱
+- [x] Calculator로 계산
+- [x] OutputView로 결과 출력
+- [x] 예외 발생 시 애플리케이션 종료
 
 <br>
 
