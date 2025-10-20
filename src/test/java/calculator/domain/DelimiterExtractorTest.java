@@ -77,4 +77,27 @@ public class DelimiterExtractorTest {
         assertThat(extractor.extract("//;:\n1;2:3")).isEqualTo(";:");
         assertThat(extractor.extract("//abc\n1a2b3c4")).isEqualTo("abc");
     }
+
+    @Test
+    void 구분자에_숫자가_포함되면_예외() {
+        assertThatThrownBy(() -> extractor.extract("//1\n213"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("구분자에 숫자를 사용할 수 없습니다");
+
+        assertThatThrownBy(() -> extractor.extract("//5\n152535"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("구분자에 숫자를 사용할 수 없습니다");
+
+        assertThatThrownBy(() -> extractor.extract("//1a\n1a2a3"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("구분자에 숫자를 사용할 수 없습니다");
+
+        assertThatThrownBy(() -> extractor.extract("//a1b\n1a1b2"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("구분자에 숫자를 사용할 수 없습니다");
+
+        assertThatThrownBy(() -> extractor.extract("//123\n1231234"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("구분자에 숫자를 사용할 수 없습니다");
+    }
 }

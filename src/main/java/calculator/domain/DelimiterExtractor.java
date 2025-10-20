@@ -10,6 +10,7 @@ public class DelimiterExtractor {
     private static final String ERROR_INVALID_PREFIX = "커스텀 구분자는 '//'로 시작해야 합니다";
     private static final String ERROR_MISSING_NEWLINE = "커스텀 구분자 형식에 '\\n'이 없습니다";
     private static final String ERROR_MULTIPLE_NEWLINES = "커스텀 구분자 형식에 '\\n'이 여러 개입니다";
+    private static final String ERROR_DELIMITER_CONTAINS_DIGIT = "구분자에 숫자를 사용할 수 없습니다";
 
     public String extract(String input) {
         if (input == null) {
@@ -28,6 +29,10 @@ public class DelimiterExtractor {
 
             if (customDelimiter.isEmpty()) {
                 throw new IllegalArgumentException(ERROR_EMPTY_DELIMITER);
+            }
+
+            if (containsDigit(customDelimiter)) {
+                throw new IllegalArgumentException(ERROR_DELIMITER_CONTAINS_DIGIT);
             }
 
             return customDelimiter;
@@ -51,5 +56,14 @@ public class DelimiterExtractor {
         if (secondNewline != -1) {
             throw new IllegalArgumentException(ERROR_MULTIPLE_NEWLINES);
         }
+    }
+
+    private boolean containsDigit(String delimiter) {
+        for (char c : delimiter.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
