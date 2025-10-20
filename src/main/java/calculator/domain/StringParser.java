@@ -8,7 +8,10 @@ public class StringParser {
     private static final String DEFAULT_DELIMITERS = ",|:" ;
 
     public List<Integer> parse(String input) {
-        if (input == null || input.isEmpty()) {
+        if (input == null) {
+            throw new IllegalArgumentException("입력값이 null입니다");
+        }
+        if (input.isEmpty()) {
             return new ArrayList<>();
         }
 
