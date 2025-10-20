@@ -29,16 +29,24 @@ public class StringParser {
         return delimiter.replaceAll("([\\\\+*?\\[\\](){}|^$.\\-])", "\\\\$1");
     }
 
-    private List<Integer> parseNumbers(String numbers, String delimiter){
+    private List<Integer> parseNumbers(String numbers, String delimiter) {
         String[] tokens = numbers.split(delimiter);
         List<Integer> result = new ArrayList<>();
 
-        for (String token : tokens){
-            if(!token.isEmpty()){
-                result.add(Integer.parseInt(token));
+        for (String token : tokens) {
+            if (!token.isEmpty()) {
+                result.add(parseInteger(token));
             }
         }
         return result;
+    }
+
+    private int parseInteger(String token) {
+        try {
+            return Integer.parseInt(token.trim());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("숫자가 아닌 값이 포함되어 있습니다: " + token);
+        }
     }
 
 }

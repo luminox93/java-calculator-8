@@ -82,7 +82,7 @@ calculator/
 - [x] 커스텀 구분자가 있으면 해당 구분자 사용, 없으면 기본 구분자(`,`, `:`) 사용
 - [x] 구분자를 기준으로 문자열 분리
 - [x] 분리된 각 문자열을 정수로 변환
-- [ ] 숫자가 아닌 값 입력 시 `IllegalArgumentException` 발생
+- [x] 숫자가 아닌 값 입력 시 `IllegalArgumentException` 발생
 - [x] 빈 토큰(연속된 구분자) 처리
 
 ### 3️⃣ 계산 (`Calculator`)
