@@ -18,7 +18,7 @@ public class NumberValidatorTest {
     }
 
     @Test
-    void 0_포함된_리스트는_검증_통과() {
+    void 숫자_0_포함된_리스트는_검증_통과() {
         assertThatCode(() -> validator.validate(List.of(0, 1, 2)))
                 .doesNotThrowAnyException();
 

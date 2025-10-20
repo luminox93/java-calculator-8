@@ -26,7 +26,7 @@ public class CalculatorTest {
     }
 
     @Test
-    void 0_포함_합계() {
+    void 숫자_0_포함_합계() {
         assertThat(calculator.sum(List.of(0, 1, 2))).isEqualTo(3);
         assertThat(calculator.sum(List.of(0))).isEqualTo(0);
     }
